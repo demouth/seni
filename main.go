@@ -444,6 +444,22 @@ func (ctx *Ctx) Params(key string) string {
 	return ""
 }
 
+func (ctx *Ctx) Query(key string, defaultValue string) string {
+	v := string(ctx.Fasthttp.QueryArgs().Peek(key))
+	if len(v) == 0 {
+		v = defaultValue
+	}
+	return v
+}
+
+func (ctx *Ctx) FormValue(key string, defaultValue string) string {
+	v := string(ctx.Fasthttp.FormValue(key))
+	if len(v) == 0 {
+		v = defaultValue
+	}
+	return v
+}
+
 func (ctx *Ctx) prettifyPath() {
 	ctx.path = TrimRight(ctx.path, '/')
 }

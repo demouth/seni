@@ -80,6 +80,19 @@ func TestParams(t *testing.T) {
 	assert.Equal(t, "Good job john and doe", bodyToString(res))
 }
 
+func TestQuery(t *testing.T) {
+	app := New()
+	app.Get("/test", func(c *Ctx) {
+		c.Status(200).SendString("Hello " + c.Query("name", "default"))
+	})
+	res, err := app.Test(httptest.NewRequest("GET", "/test?name=john", nil))
+	if err != nil {
+		assert.FailNow(t, "serving error", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "Hello john", bodyToString(res))
+}
+
 func TestHandlers(t *testing.T) {
 	app := New()
 	app.Use(func(c *Ctx) {
